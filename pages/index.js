@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useAuth } from '@/lib/auth';
 
 const Home = () => {
-  const auth = useAuth();
+  const { signInWithGitHub, user } = useAuth();
 
   return (
     <Flex
@@ -21,12 +21,12 @@ const Home = () => {
 
       <Heading mb={4}>React 2025</Heading>
 
-      {auth.user ? (
+      {user ? (
         <Button as="a" href="/dashboard">
           View dashboard
         </Button>
       ) : (
-        <Button onClick={(e) => auth.signInWithGitHub()}>Sign in</Button>
+        <Button onClick={(e) => signInWithGitHub()}>Sign in</Button>
       )}
     </Flex>
   );
