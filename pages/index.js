@@ -17,6 +17,15 @@ const Home = () => {
       <Head>
         <title>React 2025</title>
         <link rel="icon" href="/favicon.ico" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (document.cookie && document.cookie.includes('react-2025-auth')) {
+                window.location.href = "/dashboard"
+              }
+            `,
+          }}
+        />
       </Head>
 
       <Heading mb={4}>React 2025</Heading>
