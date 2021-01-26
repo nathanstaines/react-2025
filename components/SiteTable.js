@@ -2,6 +2,7 @@ import { Box, Link } from '@chakra-ui/react';
 import { Table, Td, Th, Tr } from './Table';
 import { format, parseISO } from 'date-fns';
 
+import NextLink from 'next/link';
 import React from 'react';
 
 const SiteTable = ({ sites }) => {
@@ -20,9 +21,15 @@ const SiteTable = ({ sites }) => {
         {sites.map((site) => (
           <Box as="tr" key={site.url}>
             <Td fontWeight="medium">{site.name}</Td>
-            <Td>{site.url}</Td>
             <Td>
-              <Link>View feedback</Link>
+              <Link href={site.url} isExternal>
+                {site.url}
+              </Link>
+            </Td>
+            <Td>
+              <NextLink as={`/p/${site.id}`} href="/p/[siteId]" passHref>
+                <Link>View feedback</Link>
+              </NextLink>
             </Td>
             <Td>{format(parseISO(site.createdAt), 'PPpp')}</Td>
           </Box>
