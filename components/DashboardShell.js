@@ -1,17 +1,6 @@
-import {
-  Avatar,
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Button,
-  Flex,
-  Heading,
-  Link,
-} from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, Link } from '@chakra-ui/react';
 
-import AddSiteModal from './AddSiteModal';
-import React from 'react';
+import NextLink from 'next/link';
 import { useAuth } from '@/lib/auth';
 
 const DashboardShell = ({ children }) => {
@@ -30,12 +19,16 @@ const DashboardShell = ({ children }) => {
           w="full"
         >
           <Flex>
-            <Link mr={4}>Sites</Link>
-            <Link>Feedback</Link>
+            <NextLink href="/dashboard" passHerf>
+              <Link mr={4}>Sites</Link>
+            </NextLink>
+            <NextLink href="/feedback" passHerf>
+              <Link>Feedback</Link>
+            </NextLink>
           </Flex>
           <Flex align="center" justify="center">
             {user && (
-              <Button mr={2} onClick={() => signOut()} variant="ghost">
+              <Button mr={4} onClick={() => signOut()} variant="link">
                 Sign out
               </Button>
             )}
@@ -44,15 +37,6 @@ const DashboardShell = ({ children }) => {
         </Flex>
       </Flex>
       <Flex direction="column" m="0 auto" maxW="1280px" px={8}>
-        <Breadcrumb>
-          <BreadcrumbItem>
-            <BreadcrumbLink>Sites</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <Flex justify="space-between">
-          <Heading mb={8}>My sites</Heading>
-          <AddSiteModal>+ Add site</AddSiteModal>
-        </Flex>
         {children}
       </Flex>
     </Box>
