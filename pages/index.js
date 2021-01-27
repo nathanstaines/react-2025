@@ -42,14 +42,17 @@ const Home = () => {
             color="white"
             leftIcon={<GitHubIcon />}
             mb={1}
-            onClick={(e) => signInWithGitHub()}
+            onClick={(e) => signInWithGitHub('/dashboard')}
             _hover={{
               bg: 'gray.700',
             }}
           >
             Sign in with GitHub
           </Button>
-          <Button leftIcon={<GoogleIcon />} onClick={(e) => signInWithGoogle()}>
+          <Button
+            leftIcon={<GoogleIcon />}
+            onClick={(e) => signInWithGoogle('/dashboard')}
+          >
             Sign in with Google
           </Button>
         </Stack>
