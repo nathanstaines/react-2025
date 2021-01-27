@@ -3,7 +3,6 @@ import { Table, Td, Th, Tr } from './Table';
 import { format, parseISO } from 'date-fns';
 
 import NextLink from 'next/link';
-import React from 'react';
 
 const SiteTable = ({ sites }) => {
   return (
@@ -28,7 +27,7 @@ const SiteTable = ({ sites }) => {
             </Td>
             <Td>
               <NextLink as={`/p/${site.id}`} href="/p/[siteId]" passHref>
-                <Link>View feedback</Link>
+                <Link color="blue.500">View feedback</Link>
               </NextLink>
             </Td>
             <Td>{format(parseISO(site.createdAt), 'PPpp')}</Td>

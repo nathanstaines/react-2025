@@ -1,10 +1,11 @@
-import { Button, Flex, Heading } from '@chakra-ui/react';
+import { Button, Flex, Heading, Stack } from '@chakra-ui/react';
+import { GitHubIcon, GoogleIcon } from '@/components/Icons';
 
 import Head from 'next/head';
 import { useAuth } from '@/lib/auth';
 
 const Home = () => {
-  const { signInWithGitHub, user } = useAuth();
+  const { signInWithGitHub, signInWithGoogle, user } = useAuth();
 
   return (
     <Flex
@@ -28,14 +29,30 @@ const Home = () => {
         />
       </Head>
 
-      <Heading mb={4}>React 2025</Heading>
+      <Heading mb={6}>React 2025</Heading>
 
       {user ? (
         <Button as="a" href="/dashboard">
           View dashboard
         </Button>
       ) : (
-        <Button onClick={(e) => signInWithGitHub()}>Sign in</Button>
+        <Stack>
+          <Button
+            bg="gray.900"
+            color="white"
+            leftIcon={<GitHubIcon />}
+            mb={1}
+            onClick={(e) => signInWithGitHub()}
+            _hover={{
+              bg: 'gray.700',
+            }}
+          >
+            Sign in with GitHub
+          </Button>
+          <Button leftIcon={<GoogleIcon />} onClick={(e) => signInWithGoogle()}>
+            Sign in with Google
+          </Button>
+        </Stack>
       )}
     </Flex>
   );
