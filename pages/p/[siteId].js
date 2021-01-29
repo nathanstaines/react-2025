@@ -37,7 +37,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 }
 
@@ -78,14 +78,17 @@ const FeedbackPage = ({ initialFeedback }) => {
               placeholder="Leave a comment"
               ref={inputEl}
             />
-            <Button type="submit">Add comment</Button>
+            <Button isDisabled={router.isFallback} type="submit">
+              Add comment
+            </Button>
           </FormControl>
         </Box>
       )}
 
-      {allFeedback.map((feedback) => (
-        <Feedback key={feedback.id} {...feedback} />
-      ))}
+      {allFeedback &&
+        allFeedback.map((feedback) => (
+          <Feedback key={feedback.id} {...feedback} />
+        ))}
     </Flex>
   );
 };
