@@ -35,7 +35,6 @@ const Home = ({ allFeedback }) => {
           py={16}
         >
           <Head>
-            <title>React 2025</title>
             <link rel="icon" href="/favicon.ico" />
             <script
               dangerouslySetInnerHTML={{
@@ -51,7 +50,16 @@ const Home = ({ allFeedback }) => {
           <Heading mb={6}>React 2025</Heading>
 
           {user ? (
-            <Button as="a" href="/dashboard">
+            <Button
+              as="a"
+              bg="gray.900"
+              color="white"
+              href="/dashboard"
+              maxW="200px"
+              _hover={{
+                bg: 'gray.700',
+              }}
+            >
               View dashboard
             </Button>
           ) : (

@@ -1,8 +1,6 @@
 import { Flex, Heading, Text } from '@chakra-ui/react';
 
-import AddSiteModal from './AddSiteModal';
-
-const EmptyState = () => (
+const FeedbackEmptyState = () => (
   <Flex
     align="center"
     bg="white"
@@ -13,11 +11,10 @@ const EmptyState = () => (
     w="100%"
   >
     <Heading size="lg" mb={2}>
-      You haven't added any sites.
+      There isn't any feedback.
     </Heading>
-    <Text mb={4}>Let's get started.</Text>
-    <AddSiteModal>Add your first site</AddSiteModal>
+    <Text mb={4}>Share your site!</Text>
   </Flex>
 );
 
-export default EmptyState;
+export default FeedbackEmptyState;

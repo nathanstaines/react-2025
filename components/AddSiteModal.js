@@ -56,7 +56,14 @@ const AddSiteModal = ({ children }) => {
 
   return (
     <>
-      <Button colorScheme="blue" onClick={onOpen}>
+      <Button
+        bg="gray.900"
+        color="white"
+        onClick={onOpen}
+        _hover={{
+          bg: 'gray.700',
+        }}
+      >
         {children}
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -90,7 +97,14 @@ const AddSiteModal = ({ children }) => {
             <Button mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue" type="submit">
+            <Button
+              bg="gray.900"
+              color="white"
+              type="submit"
+              _hover={{
+                bg: 'gray.700',
+              }}
+            >
               Create
             </Button>
           </ModalFooter>
