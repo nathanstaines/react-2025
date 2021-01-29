@@ -8,7 +8,14 @@ const DashboardShell = ({ children }) => {
 
   return (
     <Box bg="gray.100" h="100vh">
-      <Flex bg="white" mb={16} w="full">
+      <Flex
+        bg="white"
+        borderTop="5px"
+        borderTopColor="cyan.500"
+        borderTopStyle="solid"
+        mb={[8, 16]}
+        w="full"
+      >
         <Flex
           align="center"
           justify="space-between"
