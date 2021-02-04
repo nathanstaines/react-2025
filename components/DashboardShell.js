@@ -26,7 +26,7 @@ const DashboardShell = ({ children }) => {
           w="full"
         >
           <Flex>
-            <NextLink href="/dashboard" passHerf>
+            <NextLink href="/sites" passHerf>
               <Link mr={4}>Sites</Link>
             </NextLink>
             <NextLink href="/feedback" passHerf>

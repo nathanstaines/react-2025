@@ -1,15 +1,15 @@
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
-import { GitHubIcon, GoogleIcon } from '@/components/Icons';
 
 import Feedback from '@/components/Feedback';
 import FeedbackLink from '@/components/FeedbackLink';
 import Head from 'next/head';
+import LoginButtons from '@/components/LoginButtons';
 import { getAllFeedback } from '@/lib/db-admin';
 import { useAuth } from '@/lib/auth';
 
 const SITE_ID = process.env.NEXT_PUBLIC_HOME_PAGE_SITE_ID;
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   const { feedback } = await getAllFeedback(SITE_ID);
 
   return {
@@ -21,7 +21,7 @@ export async function getStaticProps(context) {
 }
 
 const Home = ({ allFeedback }) => {
-  const { signInWithGitHub, signInWithGoogle, user } = useAuth();
+  const { user } = useAuth();
 
   return (
     <>
@@ -40,21 +40,19 @@ const Home = ({ allFeedback }) => {
               dangerouslySetInnerHTML={{
                 __html: `
                   if (document.cookie && document.cookie.includes('react-2025-auth')) {
-                    window.location.href = "/dashboard"
+                    window.location.href = "/sites"
                   }
                 `,
               }}
             />
           </Head>
-
           <Heading mb={6}>React 2025</Heading>
-
           {user ? (
             <Button
               as="a"
               bg="gray.900"
               color="white"
-              href="/dashboard"
+              href="/sites"
               maxW="200px"
               _hover={{
                 bg: 'gray.700',
@@ -63,29 +61,7 @@ const Home = ({ allFeedback }) => {
               View dashboard
             </Button>
           ) : (
-            <Flex direction={['column', 'row']}>
-              <Button
-                bg="gray.900"
-                color="white"
-                leftIcon={<GitHubIcon />}
-                mb={[2, 0]}
-                mr={[null, 2]}
-                onClick={(e) => signInWithGitHub('/dashboard')}
-                _hover={{
-                  bg: 'gray.700',
-                }}
-              >
-                Sign in with GitHub
-              </Button>
-              <Button
-                bg="white"
-                color="gray.900"
-                leftIcon={<GoogleIcon />}
-                onClick={(e) => signInWithGoogle('/dashboard')}
-              >
-                Sign in with Google
-              </Button>
-            </Flex>
+            <LoginButtons />
           )}
         </Flex>
       </Box>
