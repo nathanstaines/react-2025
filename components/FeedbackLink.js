@@ -9,7 +9,7 @@ const FeedbackLink = ({ paths }) => {
         justify="space-between"
         mb={8}
       >
-        <Button as="a" href={`/p/${paths.join('/')}`} mb={[1, 0]} size="sm">
+        <Button as="a" href={`/sites/${paths.join('/')}`} mb={[1, 0]} size="sm">
           Leave a comment →
         </Button>
         <Text color="gray.500" fontSize="xs">

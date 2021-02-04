@@ -8,11 +8,11 @@ import {
 const FeedbackTableHeader = () => (
   <>
     <Breadcrumb>
-      <BreadcrumbItem>
+      <BreadcrumbItem isCurrentPage>
         <BreadcrumbLink>Feedback</BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
-    <Heading mb={8}>My feedback</Heading>
+    <Heading mb={8}>All feedback</Heading>
   </>
 );
 

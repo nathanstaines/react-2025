@@ -8,7 +8,7 @@ import fetcher from '@/utils/fetcher';
 import { useAuth } from '@/lib/auth';
 import useSWR from 'swr';
 
-const Dashboard = () => {
+const MySites = () => {
   const { user } = useAuth();
   const { data } = useSWR(user ? ['/api/sites', user.token] : null, fetcher);
 
@@ -33,10 +33,10 @@ const Dashboard = () => {
   );
 };
 
-const DashboardPage = () => (
-  <Page name="Dashboard" path="/dashboard">
-    <Dashboard />
+const MySitesPage = () => (
+  <Page name="My sites" path="/sites">
+    <MySites />
   </Page>
 );
 
-export default DashboardPage;
+export default MySitesPage;

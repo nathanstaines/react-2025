@@ -11,7 +11,7 @@ import AddSiteModal from './AddSiteModal';
 const SiteTableHeader = () => (
   <>
     <Breadcrumb>
-      <BreadcrumbItem>
+      <BreadcrumbItem isCurrentPage>
         <BreadcrumbLink>Sites</BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>

@@ -34,7 +34,11 @@ const SiteTable = ({ sites }) => {
                 </Link>
               </Td>
               <Td>
-                <NextLink as={`/p/${site.id}`} href="/p/[siteId]" passHref>
+                <NextLink
+                  as={`/sites/${site.id}`}
+                  href="/sites/[siteId]"
+                  passHref
+                >
                   <Link
                     textDecoration="underline"
                     _hover={{

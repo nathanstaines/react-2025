@@ -1,15 +1,11 @@
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-} from '@chakra-ui/react';
-import { getAllFeedback, getAllSites } from '@/lib/db-admin';
+import { Box, Button, Flex, FormControl, Textarea } from '@chakra-ui/react';
+import { getAllFeedback, getAllSites, getSite } from '@/lib/db-admin';
 import { useRef, useState } from 'react';
 
+import DashboardShell from '@/components/DashboardShell';
 import Feedback from '@/components/Feedback';
+import LoginButtons from '@/components/LoginButtons';
+import SiteFeedbackTableHeader from '@/components/SiteFeedbackTableHeader';
 import { createFeedback } from '@/lib/db';
 import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/router';
@@ -17,10 +13,12 @@ import { useRouter } from 'next/router';
 export async function getStaticProps(context) {
   const siteId = context.params.siteId;
   const { feedback } = await getAllFeedback(siteId);
+  const { site } = await getSite(siteId);
 
   return {
     props: {
       initialFeedback: feedback,
+      site,
     },
     revalidate: 1,
   };
@@ -41,9 +39,9 @@ export async function getStaticPaths() {
   };
 }
 
-const FeedbackPage = ({ initialFeedback }) => {
+const FeedbackPage = ({ initialFeedback, site }) => {
   const [allFeedback, setAllFeedback] = useState(initialFeedback);
-  const { user } = useAuth();
+  const { loading, user } = useAuth();
   const inputEl = useRef(null);
   const router = useRouter();
 
@@ -66,30 +64,46 @@ const FeedbackPage = ({ initialFeedback }) => {
     createFeedback(newFeedback);
   };
 
+  const LoginOrLeaveFeedback = () =>
+    user ? (
+      <Button
+        bg="gray.900"
+        color="white"
+        isDisabled={router.isFallback}
+        type="submit"
+        _hover={{
+          bg: 'gray.700',
+        }}
+      >
+        Leave feedback
+      </Button>
+    ) : (
+      <LoginButtons />
+    );
+
   return (
-    <Flex direction="column" m="0 auto" maxW="700px" w="full">
-      {user && (
+    <DashboardShell>
+      <SiteFeedbackTableHeader siteName={site?.name} />
+      <Flex direction="column" maxW="700px" w="full">
         <Box as="form" onSubmit={onSubmit}>
           <FormControl my={8}>
-            <FormLabel htmlFor="comment">Comment</FormLabel>
-            <Input
+            <Textarea
+              bg="white"
+              focusBorderColor="cyan.500"
               id="comment"
-              mb={4}
-              placeholder="Leave a comment"
+              mb={2}
+              placeholder="Leave feedback"
               ref={inputEl}
             />
-            <Button isDisabled={router.isFallback} type="submit">
-              Add comment
-            </Button>
+            {!loading && <LoginOrLeaveFeedback />}
           </FormControl>
         </Box>
-      )}
-
-      {allFeedback &&
-        allFeedback.map((feedback) => (
-          <Feedback key={feedback.id} {...feedback} />
-        ))}
-    </Flex>
+        {allFeedback &&
+          allFeedback.map((feedback) => (
+            <Feedback key={feedback.id} {...feedback} />
+          ))}
+      </Flex>
+    </DashboardShell>
   );
 };
 
