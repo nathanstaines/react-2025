@@ -8,7 +8,7 @@ import fetcher from '@/utils/fetcher';
 import { useAuth } from '@/lib/auth';
 import useSWR from 'swr';
 
-const MyFeedback = () => {
+const AllFeedback = () => {
   const { user } = useAuth();
   const { data } = useSWR(user ? ['/api/feedback', user.token] : null, fetcher);
 
@@ -33,10 +33,10 @@ const MyFeedback = () => {
   );
 };
 
-const MyFeedbackPage = () => (
-  <Page name="My feedback" path="/feedback">
-    <MyFeedback />
+const AllFeedbackPage = () => (
+  <Page name="All feedback" path="/feedback">
+    <AllFeedback />
   </Page>
 );
 
-export default MyFeedbackPage;
+export default AllFeedbackPage;

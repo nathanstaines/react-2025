@@ -1,26 +1,28 @@
 import { Box, Button, Flex, Heading } from '@chakra-ui/react';
+import { getAllFeedback, getSite } from '@/lib/db-admin';
 
 import Feedback from '@/components/Feedback';
 import FeedbackLink from '@/components/FeedbackLink';
 import Head from 'next/head';
 import LoginButtons from '@/components/LoginButtons';
-import { getAllFeedback } from '@/lib/db-admin';
 import { useAuth } from '@/lib/auth';
 
 const SITE_ID = process.env.NEXT_PUBLIC_HOME_PAGE_SITE_ID;
 
 export async function getStaticProps() {
   const { feedback } = await getAllFeedback(SITE_ID);
+  const { site } = await getSite(SITE_ID);
 
   return {
     props: {
       allFeedback: feedback,
+      site,
     },
     revalidate: 1,
   };
 }
 
-const Home = ({ allFeedback }) => {
+const Home = ({ allFeedback, site }) => {
   const { user } = useAuth();
 
   return (
@@ -68,7 +70,7 @@ const Home = ({ allFeedback }) => {
       <Flex direction="column" m="0 auto" maxW="700px" px={4} py={16} w="full">
         <FeedbackLink paths={[SITE_ID]} />
         {allFeedback.map((feedback) => (
-          <Feedback key={feedback.id} {...feedback} />
+          <Feedback key={feedback.id} settings={site?.settings} {...feedback} />
         ))}
       </Flex>
     </>

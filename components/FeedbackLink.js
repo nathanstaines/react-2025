@@ -16,7 +16,7 @@ const FeedbackLink = ({ paths }) => {
           Powered by React 2025
         </Text>
       </Flex>
-      <Divider mb={8} />
+      <Divider borderColor="gray.300" mb={8} />
     </>
   );
 };
