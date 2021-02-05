@@ -1,49 +1,33 @@
 import { Box, Button, Flex, FormControl, Textarea } from '@chakra-ui/react';
-import { getAllFeedback, getAllSites, getSite } from '@/lib/db-admin';
-import { useRef, useState } from 'react';
+import useSWR, { mutate } from 'swr';
 
 import DashboardShell from '@/components/DashboardShell';
 import Feedback from '@/components/Feedback';
 import LoginButtons from '@/components/LoginButtons';
 import SiteFeedbackTableHeader from '@/components/SiteFeedbackTableHeader';
 import { createFeedback } from '@/lib/db';
+import fetcher from '@/utils/fetcher';
 import { useAuth } from '@/lib/auth';
+import { useRef } from 'react';
 import { useRouter } from 'next/router';
 
-export async function getStaticProps(context) {
-  const siteId = context.params.siteId;
-  const { feedback } = await getAllFeedback(siteId);
-  const { site } = await getSite(siteId);
-
-  return {
-    props: {
-      initialFeedback: feedback,
-      site,
-    },
-    revalidate: 1,
-  };
-}
-
-export async function getStaticPaths() {
-  const { sites } = await getAllSites();
-
-  const paths = sites.map((site) => ({
-    params: {
-      siteId: site.id.toString(),
-    },
-  }));
-
-  return {
-    paths,
-    fallback: true,
-  };
-}
-
-const FeedbackPage = ({ initialFeedback, site }) => {
-  const [allFeedback, setAllFeedback] = useState(initialFeedback);
+const FeedbackPage = () => {
   const { loading, user } = useAuth();
   const inputEl = useRef(null);
   const router = useRouter();
+
+  const siteAndRoute = router.query?.site;
+  const siteId = siteAndRoute ? siteAndRoute[0] : null;
+  const route = siteAndRoute ? siteAndRoute[1] : null;
+  const feedbackApi = route
+    ? `/api/feedback/${siteId}/${route}`
+    : `/api/feedback/${siteId}`;
+
+  const { data: siteData } = useSWR(`/api/sites/${siteId}`, fetcher);
+  const { data: feedbackData } = useSWR(feedbackApi, fetcher);
+
+  const site = siteData?.site;
+  const allFeedback = feedbackData?.feedback;
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -51,17 +35,26 @@ const FeedbackPage = ({ initialFeedback, site }) => {
     const newFeedback = {
       author: user.name,
       authorId: user.uid,
-      siteId: router.query.siteId,
-      text: inputEl.current.value,
       createdAt: new Date().toISOString(),
       provider: user.provider,
+      route: route || '/',
+      siteAuthorId: site.authorId,
+      siteId,
       status: 'pending',
+      text: inputEl.current.value,
     };
 
     inputEl.current.value = '';
 
-    setAllFeedback([newFeedback, ...allFeedback]);
     createFeedback(newFeedback);
+
+    mutate(
+      feedbackApi,
+      async (data) => ({
+        feedback: [newFeedback, ...data.feedback],
+      }),
+      false
+    );
   };
 
   const LoginOrLeaveFeedback = () =>
@@ -69,7 +62,7 @@ const FeedbackPage = ({ initialFeedback, site }) => {
       <Button
         bg="gray.900"
         color="white"
-        isDisabled={router.isFallback}
+        isDisabled={!siteData || !feedbackData}
         type="submit"
         _hover={{
           bg: 'gray.700',
@@ -83,13 +76,19 @@ const FeedbackPage = ({ initialFeedback, site }) => {
 
   return (
     <DashboardShell>
-      <SiteFeedbackTableHeader siteName={site?.name} />
+      <SiteFeedbackTableHeader
+        isSiteOwner={site?.authorId === user?.uid}
+        route={route}
+        site={site}
+        siteId={siteId}
+      />
       <Flex direction="column" maxW="700px" w="full">
         <Box as="form" onSubmit={onSubmit}>
           <FormControl my={8}>
             <Textarea
               bg="white"
               focusBorderColor="cyan.500"
+              isDisabled={!user}
               id="comment"
               mb={2}
               placeholder="Leave feedback"
@@ -100,7 +99,11 @@ const FeedbackPage = ({ initialFeedback, site }) => {
         </Box>
         {allFeedback &&
           allFeedback.map((feedback) => (
-            <Feedback key={feedback.id} {...feedback} />
+            <Feedback
+              key={feedback.id}
+              settings={site?.settings}
+              {...feedback}
+            />
           ))}
       </Flex>
     </DashboardShell>
